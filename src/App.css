@@ -1,0 +1,7 @@
+
+.mainContainer{
+    border: 10px solid red;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
