@@ -2,7 +2,6 @@ import React from "react";
 import {NavLink} from 'react-router-dom'
 import '../Styles/Navbar.css'
 
-
 const Navbar = () => {
   return (
       <nav className="navbar navbar-expand-lg custom-navbar">

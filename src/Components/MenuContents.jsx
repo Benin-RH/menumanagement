@@ -14,7 +14,7 @@ const MenuContents = () => {
         <button className={`tab ${selectMenu == 'Drinks'? 'active':''}`} onClick={()=>{handleMenuSelector('Drinks')}}>DRINKS</button>
       </div>
 
-      <div className="menu-content border border-5">
+      <div className="menu-content border border-2 rounded rounded-3">
       {!selectMenu && <p>please select Drinks or Foods to add your favourite </p>}
 
        {selectMenu && <MenuContentSelector menu={selectMenu}/>}

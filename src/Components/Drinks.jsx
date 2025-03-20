@@ -1,17 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../Styles/Menu.css";
 import AddMenuItemsForm from "./AddMenuItemsForm";
+import axios from "axios";
 
 const Drinks = ({ menu }) => {
   const [drinkList, setDrinkList] = useState([]);
   const [openForm, setOpenForm] = useState(false);
 
   const handleAddDrink = (newDrink) => {
-    if (menu === "Drinks") {
-      setDrinkList([...drinkList, { ...newDrink, menu }]); // Store with menu type
-    }
-    setOpenForm(false);
+    console.log(newDrink, menu);
+
+    axios
+      .post("http://localhost:5000/addMenuItem", newDrink, menu)
+      .then((res) => {
+        console.log(res);
+        getDrinkList();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
+
+  const getDrinkList = () => {
+    axios
+      .get(`http://localhost:5000/menu/${menu}`)
+      .then((res) => {
+        setDrinkList(res.data);
+      })
+      .catch((err) => {
+        console.error("Error fetching menu items:", err);
+      });
+  };
+  useEffect(() => {
+    getDrinkList();
+  }, [menu]);
 
   return (
     <>
@@ -32,35 +54,22 @@ const Drinks = ({ menu }) => {
             </div>
           </div>
         ))}
-
-        {/* Static menu items */}
-        <div className="menu-item">
-          <div className="menu-text">
-            <h3>
-              CINNAMON TOAST CRUNCH <span className="price">$16</span>
-            </h3>
-            <p>
-              Screwball peanut butter whiskey, vanilla extract, Amaretto,
-              Baileys, egg white, cinnamon
-            </p>
-          </div>
-        </div>
-
-        <div className="menu-item">
-          <div className="menu-text">
-            <h3>
-              BAR 42 MARY <span className="price">$14</span>
-            </h3>
-            <p>
-              Tito’s, tomato juice, Worcestershire, celery salt, black pepper,
-              Tabasco, fully loaded
-            </p>
-          </div>
-        </div>
+         {drinkList.length == 0 ? (
+          <p className="text-info">please Add your Favourite Drink</p>
+        ) : (
+          ""
+        )}
+       
       </div>
 
       {/* Pass menu prop to the form */}
-      {openForm && <AddMenuItemsForm menu={menu} onClose={() => setOpenForm(false)} onAdd={handleAddDrink} />}
+      {openForm && (
+        <AddMenuItemsForm
+          menu={menu}
+          onClose={() => setOpenForm(false)}
+          onAdd={handleAddDrink}
+        />
+      )}
     </>
   );
 };
